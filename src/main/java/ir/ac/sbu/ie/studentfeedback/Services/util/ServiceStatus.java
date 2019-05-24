@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.Services;
+package ir.ac.sbu.ie.studentfeedback.Services.util;
 
 public enum ServiceStatus {
     FAILED,

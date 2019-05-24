@@ -1,32 +1,41 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
+import ir.ac.sbu.ie.studentfeedback.Entities.Util.UserType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "sf_users")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
-    private long id;
-    @Getter @Setter
+    private Long id;
+    @Getter @Setter @NonNull
     private String username;
+    @Getter @Setter @NonNull
+    private String password;
     @Getter @Setter
-    private String email;
-    @Getter @Setter
+    private String sid;
+    @Getter @Setter @NonNull
     private UserType userType;
+    @Getter @Setter
+    private String token;
 
-    @OneToMany(mappedBy = "issuedUser", targetEntity = Case.class, fetch = FetchType.EAGER)
+    @Getter @Setter
+    private Boolean validated;
+
+    @OneToMany(mappedBy = "issuingUser")
     @Getter @Setter
     private List<Case> issuedCases;
 
-    @OneToMany(mappedBy = "inspectingUser", targetEntity = Case.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "inspectingUser", fetch = FetchType.LAZY)
     @Getter @Setter
     private List<Case> inspectingCases;
 
@@ -35,6 +44,7 @@ public class User {
         this.issuedCases = new ArrayList<>();
         this.inspectingCases = new ArrayList<>();
         this.userType = UserType.STUDENT;
+        this.validated = false;
     }
 
 }

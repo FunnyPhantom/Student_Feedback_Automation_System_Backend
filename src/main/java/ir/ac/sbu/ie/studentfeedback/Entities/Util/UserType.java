@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.Entities;
+package ir.ac.sbu.ie.studentfeedback.Entities.Util;
 
 public enum UserType {
     STUDENT(1),
