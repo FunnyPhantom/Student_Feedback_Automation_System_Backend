@@ -28,8 +28,8 @@ public class User implements Serializable {
     @Getter @Setter
     private String token;
 
-    @Getter @Setter
-    private Boolean validated;
+    @Getter @Setter @NonNull
+    private Integer validated;
 
     @OneToMany(mappedBy = "issuingUser")
     @Getter @Setter
@@ -44,7 +44,7 @@ public class User implements Serializable {
         this.issuedCases = new ArrayList<>();
         this.inspectingCases = new ArrayList<>();
         this.userType = UserType.STUDENT;
-        this.validated = false;
+        this.validated = 1;
     }
 
 }

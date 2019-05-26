@@ -6,5 +6,4 @@ public enum CaseCategory {
     SUGGESTION,
     REQUEST,
     UNKNOWN
-
 }

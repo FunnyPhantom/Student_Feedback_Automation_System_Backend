@@ -8,6 +8,7 @@ import ir.ac.sbu.ie.studentfeedback.Services.util.AuthValidator;
 import ir.ac.sbu.ie.studentfeedback.Services.util.ServiceStatus;
 import ir.ac.sbu.ie.studentfeedback.Types.LoginInputType;
 import ir.ac.sbu.ie.studentfeedback.Types.RegisterInputType;
+import ir.ac.sbu.ie.studentfeedback.Types.StudentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,11 +52,13 @@ public class AuthService {
                 map.put(KEY_AUTH_STATUS, AuthStatus.SID_EXIST);
             }
             // saving the user
-            User u = new User(registerEntry.getUsername(), registerEntry.getPassword(), UserType.STUDENT);
-            u.setSid(registerEntry.getSid());
-            userRepository.save(u);
-            map.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
+            else  {
+                User u = new User(registerEntry.getUsername(), registerEntry.getPassword(), UserType.STUDENT, 1);
+                u.setSid(registerEntry.getSid());
+                userRepository.save(u);
+                map.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
 
+            }
         } else {
             map.put(KEY_SERVICE_STATUS, ServiceStatus.FAILED);
             map.put(KEY_AUTH_STATUS, authValidator.validateRegisterEntry(registerEntry));
@@ -66,7 +69,7 @@ public class AuthService {
     public Map<String, Object> login(LoginInputType loginEntry) {
         Map<String, Object> map = new HashMap<>();
         // validating input
-        if (authValidator.validateLoginEntery(loginEntry) == AuthStatus.VALID) {
+        if (authValidator.validateLoginEntry(loginEntry) == AuthStatus.VALID) {
             User u = userRepository.findByUsername(loginEntry.getUsername()).orElse(null);
             // validating user existence
             if (u == null) {
@@ -81,7 +84,8 @@ public class AuthService {
                     // setting the token if the token does not exist.
                     if (u.getToken() == null) {
                         //todo: generate token and set token and persist user with the token.
-                        u.setToken(u.getUsername());
+                        u.setToken("Bearer " + u.getUsername().hashCode());
+                        userRepository.save(u);
                     }
                     map.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
                     map.put(KEY_USER_TOKEN, u.getToken());
@@ -89,7 +93,7 @@ public class AuthService {
             }
         } else {
             map.put(KEY_SERVICE_STATUS, ServiceStatus.FAILED);
-            map.put(KEY_AUTH_STATUS, authValidator.validateLoginEntery(loginEntry));
+            map.put(KEY_AUTH_STATUS, authValidator.validateLoginEntry(loginEntry));
         }
         return map;
     }
@@ -102,8 +106,9 @@ public class AuthService {
                 map.put(KEY_SERVICE_STATUS, ServiceStatus.FAILED);
                 map.put(KEY_AUTH_STATUS, AuthStatus.TOKEN_NOT_FOUND);
             } else {
-                map.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
-                map.put(KEY_SAVED_USER, u);
+                    map.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
+                    map.put(KEY_USER_TYPE, u.getUserType());
+                    map.put(KEY_SAVED_USER, u);
             }
         } else {
             map.put(KEY_SERVICE_STATUS, ServiceStatus.FAILED);
