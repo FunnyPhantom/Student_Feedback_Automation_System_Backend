@@ -7,8 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class StudentfeedbackApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(StudentfeedbackApplication.class, args);
+
     }
 
 }

@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.Controllers.util;
+package ir.ac.sbu.ie.studentfeedback.utils;
 
 public enum FailReasons {
     BLANK_FIRSTNAME,
@@ -7,6 +7,6 @@ public enum FailReasons {
     BLANK_PASSWORD,
     BLANK_JOBTITLE,
     BLANK_ENTRY,
-    EXIST_USERNAME;
+    EXIST_USERNAME
 
 }
