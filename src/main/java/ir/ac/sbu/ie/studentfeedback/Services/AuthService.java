@@ -8,7 +8,6 @@ import ir.ac.sbu.ie.studentfeedback.Services.util.AuthValidator;
 import ir.ac.sbu.ie.studentfeedback.Services.util.ServiceStatus;
 import ir.ac.sbu.ie.studentfeedback.Types.LoginInputType;
 import ir.ac.sbu.ie.studentfeedback.Types.RegisterInputType;
-import ir.ac.sbu.ie.studentfeedback.Types.StudentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,15 +1,11 @@
-package ir.ac.sbu.ie.studentfeedback.Controllers.RestController.Api.V1;
+package ir.ac.sbu.ie.studentfeedback.Controllers;
 
-import com.sun.net.httpserver.Headers;
-import io.swagger.models.parameters.HeaderParameter;
 import ir.ac.sbu.ie.studentfeedback.Entities.User;
 import ir.ac.sbu.ie.studentfeedback.Entities.Util.UserType;
 import ir.ac.sbu.ie.studentfeedback.Services.AuthService;
-import ir.ac.sbu.ie.studentfeedback.Services.util.AuthStatus;
-import ir.ac.sbu.ie.studentfeedback.Services.util.ServiceResponseMapKeys;
 import ir.ac.sbu.ie.studentfeedback.Types.LoginInputType;
 import ir.ac.sbu.ie.studentfeedback.Types.RegisterInputType;
-import ir.ac.sbu.ie.studentfeedback.Types.StudentType;
+import ir.ac.sbu.ie.studentfeedback.Types.UserOutputType;
 import org.springframework.beans.factory.annotation.Autowired;
 import ir.ac.sbu.ie.studentfeedback.Services.util.ServiceStatus;
 
@@ -17,7 +13,6 @@ import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,16 +65,14 @@ public class AuthRestController {
     @Consumes(MediaType.WILDCARD)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@HeaderParam("Authorization") String auth) {
+        System.out.println("Token:" + auth);
         Map<String, Object> serviceAns = authService.getUser(auth);
         System.out.println("##GetUser");
         System.out.println("serviceAns = " + serviceAns);
         if (serviceAns.get(KEY_SERVICE_STATUS) == ServiceStatus.FAILED){
             return badResponseBuilder(serviceAns).build();
         } else {
-            if(serviceAns.get(KEY_USER_TYPE) == UserType.STUDENT) {
-                return Response.ok(StudentType.buildStudentType(((User) serviceAns.get(KEY_SAVED_USER)))).build();
-            } else
-                return Response.ok(serviceAns.get(KEY_SAVED_USER)).build();
+            return Response.ok(UserOutputType.buildUserOutputType(((User) serviceAns.get(KEY_SAVED_USER)))).build();
         }
     }
 

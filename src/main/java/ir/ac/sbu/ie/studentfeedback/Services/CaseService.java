@@ -64,5 +64,37 @@ public class CaseService {
         }
         return ans;
     }
+    public Map<String, Object> getUserCaseById(String userToken, Long caseId) {
+        Map<String, Object> ans = new HashMap<>();
+        Map<String, Object> serviceAns = this.authService.getUser(userToken);
+        if(serviceAns.get(KEY_SERVICE_STATUS).equals(ServiceStatus.FAILED)) {
+            ans.put(KEY_SERVICE_STATUS, ServiceStatus.FAILED);
+            ans.put(KEY_CASE_SERVICE_STATUS, serviceAns.get(KEY_AUTH_STATUS));
+        } else  {
+            Case c = caseRepository.findById(caseId).orElse(null);
+            if (c == null) {
+                ans.put(KEY_SERVICE_STATUS, ServiceStatus.FAILED);
+                ans.put(KEY_CASE_SERVICE_STATUS, CaseServiceStatus.CASE_NOT_FOUND);
+            } else {
+                User requestingUser = ((User) serviceAns.get(KEY_SAVED_USER));
+                if (requestingUser.getUserType() == UserType.ADMIN) {
+                    ans.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
+                    ans.put(KEY_PAYLOAD_MY_CASES, c);
+                } else if (requestingUser.getUserType() == UserType.STUDENT) {
+                    if (c.getIssuingUser().equals(requestingUser)) {
+                        ans.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
+                        ans.put(KEY_PAYLOAD_MY_CASES, c);
+                    } else {
+                        ans.put(KEY_SERVICE_STATUS, ServiceStatus.FAILED);
+                        ans.put(KEY_CASE_SERVICE_STATUS, CaseServiceStatus.ILLEGAL_USER_ACCESS);
+                    }
+                } else { //prof and employee. todo: impl
+                    ans.put(KEY_SERVICE_STATUS, ServiceStatus.SUCCESS);
+                    ans.put(KEY_PAYLOAD_MY_CASES, c);
+                }
+            }
+        }
+        return ans;
+    }
 
 }

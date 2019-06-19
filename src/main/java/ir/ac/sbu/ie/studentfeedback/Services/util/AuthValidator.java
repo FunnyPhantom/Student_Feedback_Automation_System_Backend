@@ -1,5 +1,6 @@
 package ir.ac.sbu.ie.studentfeedback.Services.util;
 
+import ir.ac.sbu.ie.studentfeedback.Types.CaseInputType;
 import ir.ac.sbu.ie.studentfeedback.Types.LoginInputType;
 import ir.ac.sbu.ie.studentfeedback.Types.RegisterInputType;
 
@@ -32,6 +33,7 @@ public class AuthValidator {
         if (isNullOrEmpty(loginEntry.getPassword())) {
             return AuthStatus.PASSWORD_EMPTY;
         }
+        CaseInputType caseInputType = new CaseInputType();
         return AuthStatus.VALID;
 
     }

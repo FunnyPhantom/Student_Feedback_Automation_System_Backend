@@ -8,21 +8,18 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class StudentType {
+public class UserOutputType {
     private Long id;
     private String username;
     private String sid;
-    private List<Case> issuedCases;
+    private UserType userType;
 
-    private StudentType(User u) {
+    private UserOutputType(User u) {
         this.id = u.getId();
         this.username = u.getUsername();
         this.sid = u.getSid();
-        this.issuedCases = u.getIssuedCases();
+        this.userType = u.getUserType();
     }
 
-    public static StudentType buildStudentType(User u) {
-        return new StudentType(u);
-    }
-
+    public static UserOutputType buildUserOutputType(User u) { return new UserOutputType(u);}
 }
