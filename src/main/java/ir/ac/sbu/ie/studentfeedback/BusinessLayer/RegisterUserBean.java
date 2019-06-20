@@ -30,6 +30,7 @@ public class RegisterUserBean {
         Employee e = employeeDao.save(Employee.buildFromEmployeeInput(employeeInput));
         return e;
     }
+
     public Student registerStudent(StudentInput studentInput) {
         Student s = studentDao.save(Student.buildFromStudentInput(studentInput));
         return s;

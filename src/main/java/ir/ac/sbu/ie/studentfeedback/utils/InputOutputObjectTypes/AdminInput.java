@@ -8,4 +8,8 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class AdminInput extends UserInput {
+
+    public static boolean isBlankEntry(AdminInput adminInput) {
+        return UserInput.isBlankEntry(adminInput);
+    }
 }

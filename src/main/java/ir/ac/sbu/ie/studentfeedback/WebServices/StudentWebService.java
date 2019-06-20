@@ -4,7 +4,6 @@ import ir.ac.sbu.ie.studentfeedback.BusinessLayer.RegisterUserBean;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.StudentInput;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
@@ -31,7 +30,7 @@ public class StudentWebService {
     @Path("/register")
     public Response registerStudent(StudentInput studentInput) {
         Student s = registerUserBean.registerStudent(studentInput);
-        return Response.created(URI.create("student/"+s.getId())).build();
+        return Response.created(URI.create("student/" + s.getId())).build();
     }
 
 }

@@ -1,7 +1,9 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,23 +16,29 @@ import javax.validation.constraints.NotNull;
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter @Getter
+    @Setter
+    @Getter
     protected Long id;
     @NotNull
-    @Setter @Getter
+    @Setter
+    @Getter
     protected String firstName;
     @NotNull
-    @Setter @Getter
+    @Setter
+    @Getter
     protected String lastName;
     @NotNull
-    @Setter @Getter
+    @Setter
+    @Getter
     protected String username;
     @NotNull
-    @Setter @Getter
+    @Setter
+    @Getter
     protected String password;
 
     @NotNull
-    @Setter @Getter
+    @Setter
+    @Getter
     protected UserValidationStatus validationStatus;
 
 
@@ -41,6 +49,7 @@ public abstract class User {
         this.username = username;
         this.password = password;
     }
+
     public User() {
         this.validationStatus = UserValidationStatus.PENDING;
     }

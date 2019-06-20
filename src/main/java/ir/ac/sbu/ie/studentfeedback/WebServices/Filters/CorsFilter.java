@@ -10,6 +10,15 @@ import java.io.IOException;
 public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
     /**
+     * A preflight request is an OPTIONS request
+     * with an Origin header.
+     */
+    private static boolean isPreflightRequest(ContainerRequestContext request) {
+        return request.getHeaderString("Origin") != null
+                && request.getMethod().equalsIgnoreCase("OPTIONS");
+    }
+
+    /**
      * Method for ContainerRequestFilter.
      */
     @Override
@@ -21,15 +30,6 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         if (isPreflightRequest(request)) {
             request.abortWith(Response.ok().build());
         }
-    }
-
-    /**
-     * A preflight request is an OPTIONS request
-     * with an Origin header.
-     */
-    private static boolean isPreflightRequest(ContainerRequestContext request) {
-        return request.getHeaderString("Origin") != null
-                && request.getMethod().equalsIgnoreCase("OPTIONS");
     }
 
     /**
