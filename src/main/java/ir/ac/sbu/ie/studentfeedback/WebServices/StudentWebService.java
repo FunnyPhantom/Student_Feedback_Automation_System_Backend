@@ -1,6 +1,6 @@
 package ir.ac.sbu.ie.studentfeedback.WebServices;
 
-import ir.ac.sbu.ie.studentfeedback.BusinessLayer.RegisterUserBean;
+import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.EmployeeLogicBean;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.StudentInput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +18,18 @@ import java.net.URI;
 @Path("/student")
 public class StudentWebService {
 
-    private final RegisterUserBean registerUserBean;
+    private final EmployeeLogicBean employeeLogicBean;
 
     @Autowired
-    public StudentWebService(RegisterUserBean registerUserBean) {
-        this.registerUserBean = registerUserBean;
+    public StudentWebService(EmployeeLogicBean employeeLogicBean) {
+        this.employeeLogicBean = employeeLogicBean;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/register")
     public Response registerStudent(StudentInput studentInput) {
-        Student s = registerUserBean.registerStudent(studentInput);
-        return Response.created(URI.create("student/" + s.getId())).build();
+        return Response.serverError().build();
     }
 
 }

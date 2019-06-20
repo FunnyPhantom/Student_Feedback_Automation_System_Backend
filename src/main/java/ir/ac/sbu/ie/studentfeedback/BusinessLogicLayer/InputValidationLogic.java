@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.BusinessLayer;
+package ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer;
 
 import ir.ac.sbu.ie.studentfeedback.Dao.AdminDao;
 import ir.ac.sbu.ie.studentfeedback.Dao.EmployeeDao;
@@ -6,7 +6,7 @@ import ir.ac.sbu.ie.studentfeedback.Dao.StudentDao;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.AdminInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.EmployeeInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.StudentInput;
-import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.InputValidationResponse;
+import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.ProcedureResponse.InputValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
@@ -32,7 +32,7 @@ public class InputValidationLogic {
         if (employeeDao.findByUsername(employeeInput.getUsername()).isPresent()) {
             return InputValidationResponse.FAILED__USERNAME_EXISTS;
         }
-        return InputValidationResponse.FAILED__USERNAME_EXISTS;
+        return InputValidationResponse.SUCCESS;
     }
 
     public InputValidationResponse validateStudentInput(StudentInput studentInput) {
@@ -43,7 +43,7 @@ public class InputValidationLogic {
             return InputValidationResponse.FAILED__USERNAME_EXISTS;
         }
         if (studentDao.findByStudentId(studentInput.getStudentId()).isPresent()) {
-            return InputValidationResponse.FAILED__STUENDTID_EXISTS;
+            return InputValidationResponse.FAILED__STUDENT_ID_EXISTS;
         }
         return InputValidationResponse.SUCCESS;
     }
