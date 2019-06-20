@@ -7,6 +7,5 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class StudentInput extends UserInput {
-    protected String studentId;
+public class AdminInput extends UserInput {
 }

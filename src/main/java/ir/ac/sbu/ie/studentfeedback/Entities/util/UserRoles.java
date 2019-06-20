@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.utils;
+package ir.ac.sbu.ie.studentfeedback.Entities.util;
 
 public enum UserRoles {
     ADMIN,

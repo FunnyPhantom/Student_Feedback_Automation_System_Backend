@@ -1,16 +1,12 @@
 package ir.ac.sbu.ie.studentfeedback.WebServices;
 
-import ir.ac.sbu.ie.studentfeedback.BusinessLayer.InputValidationLogics;
 import ir.ac.sbu.ie.studentfeedback.BusinessLayer.RegisterUserBean;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.EmployeeInput;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;

@@ -1,7 +1,6 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
-import ir.ac.sbu.ie.studentfeedback.utils.UserRoles;
-import ir.ac.sbu.ie.studentfeedback.utils.UserValidationStatus;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import lombok.*;
 
 import javax.persistence.GeneratedValue;

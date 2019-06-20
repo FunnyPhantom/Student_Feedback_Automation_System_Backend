@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.utils;
+package ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication;
 
 public class ProcedureCommunicationKeys {
     public static String KEY_WEB_SERVICE_STATUS = "KEY_WEB_SERVICE_STATUS";

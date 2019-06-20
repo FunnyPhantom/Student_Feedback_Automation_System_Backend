@@ -1,8 +1,6 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
-import ir.ac.sbu.ie.studentfeedback.utils.UserValidationStatus;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import lombok.ToString;
 
 import javax.persistence.Entity;

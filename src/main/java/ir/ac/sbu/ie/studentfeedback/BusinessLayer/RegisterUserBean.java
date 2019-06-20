@@ -16,14 +16,14 @@ public class RegisterUserBean {
     private EmployeeDao employeeDao;
     private StudentDao studentDao;
     private AdminDao adminDao;
-    private InputValidationLogics inputValidationLogics;
+    private InputValidationLogic inputValidationLogic;
 
     @Autowired
-    public RegisterUserBean(EmployeeDao employeeDao, StudentDao studentDao, AdminDao adminDao, InputValidationLogics inputValidationLogics) {
+    public RegisterUserBean(EmployeeDao employeeDao, StudentDao studentDao, AdminDao adminDao, InputValidationLogic inputValidationLogic) {
         this.employeeDao = employeeDao;
         this.studentDao = studentDao;
         this.adminDao = adminDao;
-        this.inputValidationLogics = inputValidationLogics;
+        this.inputValidationLogic = inputValidationLogic;
     }
 
     public Employee registerEmployee(EmployeeInput employeeInput) {
