@@ -1,5 +1,6 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRoles;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +42,10 @@ public abstract class User {
     @Getter
     protected UserValidationStatus validationStatus;
 
+    @Setter
+    @Getter
+    protected String authorizationToken;
+
 
     public User(@NotNull String firstName, @NotNull String lastName, @NotNull String username, @NotNull String password) {
         this();
@@ -53,5 +58,7 @@ public abstract class User {
     public User() {
         this.validationStatus = UserValidationStatus.PENDING;
     }
+
+    public abstract UserRoles getUserRole();
 
 }

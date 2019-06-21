@@ -1,6 +1,7 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
-import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.EmployeeInput;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRoles;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,7 +26,14 @@ public class Employee extends User {
         super();
     }
 
-    public static Employee buildFromEmployeeInput(EmployeeInput e) {
+    @Override
+    public UserRoles getUserRole() {
+        return UserRoles.EMPLOYEE;
+    }
+
+    public static Employee buildFromEmployeeInput(EmployeeRegisterInput e) {
         return new Employee(e.getFirstName(), e.getLastName(), e.getUsername(), e.getPassword(), e.getJobTitle());
     }
+
+
 }

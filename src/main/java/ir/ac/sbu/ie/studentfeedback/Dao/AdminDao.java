@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface AdminDao extends CrudRepository<Admin, Long> {
     Optional<Admin> findByUsername(String username);
+
+    Optional<Admin> findByAuthorizationToken(String token);
 }

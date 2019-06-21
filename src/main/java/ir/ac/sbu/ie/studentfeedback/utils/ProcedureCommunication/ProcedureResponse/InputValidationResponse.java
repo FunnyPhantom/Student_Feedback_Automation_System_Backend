@@ -10,7 +10,7 @@ public final class InputValidationResponse extends BooleanProcedureResponse {
         super(p, f);
     }
 
-    public static InputValidationResponse buildFailedValidationResponse(FailReason f) {
+    private static InputValidationResponse buildFailedValidationResponse(FailReason f) {
         return new InputValidationResponse(ProcedureStatus.FAILED, f);
     }
 

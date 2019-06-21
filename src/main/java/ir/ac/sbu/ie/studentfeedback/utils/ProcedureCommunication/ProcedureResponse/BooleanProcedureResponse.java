@@ -7,12 +7,16 @@ import org.springframework.lang.Nullable;
 
 @ToString
 public class BooleanProcedureResponse extends ProcedureResponse {
-    protected BooleanProcedureResponse(ProcedureStatus p, @Nullable FailReason f) {
+    BooleanProcedureResponse(ProcedureStatus p, @Nullable FailReason f) {
         super(p, f);
     }
 
-    public static BooleanProcedureResponse buildProcedureResponse(ProcedureStatus p, FailReason f) {
+    private static BooleanProcedureResponse buildProcedureResponse(ProcedureStatus p, FailReason f) {
         return new BooleanProcedureResponse(p, f);
+    }
+
+    public static BooleanProcedureResponse buildFailedResponse(FailReason f) {
+        return buildProcedureResponse(ProcedureStatus.FAILED, f);
     }
 
     public final static BooleanProcedureResponse SUCCESS = new BooleanProcedureResponse(ProcedureStatus.SUCCESS, null);

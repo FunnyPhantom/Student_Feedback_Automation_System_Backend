@@ -8,5 +8,7 @@ import java.util.Optional;
 public interface StudentDao extends PagingAndSortingRepository<Student, Long> {
     Optional<Student> findByUsername(String username);
 
+    Optional<Student> findByAuthorizationToken(String token);
     Optional<Student> findByStudentId(String sid);
+
 }

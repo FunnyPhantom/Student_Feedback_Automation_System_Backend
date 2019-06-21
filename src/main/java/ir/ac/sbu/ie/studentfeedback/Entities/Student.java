@@ -1,6 +1,7 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
-import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.StudentInput;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRoles;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,7 +26,12 @@ public class Student extends User {
         super();
     }
 
-    public static Student buildFromStudentInput(StudentInput studentInput) {
+    @Override
+    public UserRoles getUserRole() {
+        return UserRoles.STUDENT;
+    }
+
+    public static Student buildFromStudentInput(StudentRegisterInput studentInput) {
         return new Student(studentInput.getFirstName(), studentInput.getLastName(), studentInput.getUsername(), studentInput.getPassword(), studentInput.getStudentId());
     }
 

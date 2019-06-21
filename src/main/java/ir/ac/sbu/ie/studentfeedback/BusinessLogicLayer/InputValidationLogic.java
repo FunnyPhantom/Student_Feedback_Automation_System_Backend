@@ -3,9 +3,10 @@ package ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer;
 import ir.ac.sbu.ie.studentfeedback.Dao.AdminDao;
 import ir.ac.sbu.ie.studentfeedback.Dao.EmployeeDao;
 import ir.ac.sbu.ie.studentfeedback.Dao.StudentDao;
-import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.AdminInput;
-import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.EmployeeInput;
-import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.StudentInput;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.AdminRegisterInput;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.ProcedureResponse.InputValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,8 +26,8 @@ public class InputValidationLogic {
         this.adminDao = adminDao;
     }
 
-    public InputValidationResponse validateEmployeeInput(EmployeeInput employeeInput) {
-        if (EmployeeInput.isBlankEntry(employeeInput)) {
+    public InputValidationResponse validateEmployeeRegisterInput(EmployeeRegisterInput employeeInput) {
+        if (EmployeeRegisterInput.isBlankEntry(employeeInput)) {
             return InputValidationResponse.FAILED__BLANK_ENTRY;
         }
         if (employeeDao.findByUsername(employeeInput.getUsername()).isPresent()) {
@@ -35,8 +36,8 @@ public class InputValidationLogic {
         return InputValidationResponse.SUCCESS;
     }
 
-    public InputValidationResponse validateStudentInput(StudentInput studentInput) {
-        if (StudentInput.isBlankEntry(studentInput)) {
+    public InputValidationResponse validateStudentRegisterInput(StudentRegisterInput studentInput) {
+        if (StudentRegisterInput.isBlankEntry(studentInput)) {
             return InputValidationResponse.FAILED__BLANK_ENTRY;
         }
         if (studentDao.findByUsername(studentInput.getUsername()).isPresent()) {
@@ -48,8 +49,8 @@ public class InputValidationLogic {
         return InputValidationResponse.SUCCESS;
     }
 
-    public InputValidationResponse validateAdminInput(AdminInput adminInput) {
-        if (AdminInput.isBlankEntry(adminInput)) {
+    public InputValidationResponse validateAdminRegisterInput(AdminRegisterInput adminInput) {
+        if (AdminRegisterInput.isBlankEntry(adminInput)) {
             return InputValidationResponse.FAILED__BLANK_ENTRY;
         }
         if (adminDao.findByUsername(adminInput.getUsername()).isPresent()) {
@@ -57,4 +58,14 @@ public class InputValidationLogic {
         }
         return InputValidationResponse.SUCCESS;
     }
+
+    public InputValidationResponse validateUserLoginInput(UserLoginInput input) {
+        if (UserLoginInput.isBlankEntry(input)) {
+            return InputValidationResponse.FAILED__BLANK_ENTRY;
+        }
+
+        return InputValidationResponse.SUCCESS;
+    }
+
+
 }

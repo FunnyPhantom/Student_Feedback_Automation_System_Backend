@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface EmployeeDao extends PagingAndSortingRepository<Employee, Long> {
 
     Optional<Employee> findByUsername(String username);
+
+    Optional<Employee> findByAuthorizationToken(String token);
 }
