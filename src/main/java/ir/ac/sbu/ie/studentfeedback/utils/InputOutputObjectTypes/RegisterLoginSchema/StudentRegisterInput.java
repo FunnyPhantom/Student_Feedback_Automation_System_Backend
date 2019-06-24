@@ -13,7 +13,7 @@ public class StudentRegisterInput extends UserRegisterInput {
 
 
     public static boolean isBlankEntry(StudentRegisterInput studentInput) {
-        return studentInput == null || UserRegisterInput.isBlankEntry(studentInput) ||
+        return UserRegisterInput.isBlankEntry(studentInput) ||
                 Strings.isBlank(studentInput.getStudentId());
     }
 }

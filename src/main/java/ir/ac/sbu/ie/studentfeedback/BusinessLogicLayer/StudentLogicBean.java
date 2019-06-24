@@ -3,6 +3,7 @@ package ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer;
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.util.AuthorizationTokenGenerator;
 import ir.ac.sbu.ie.studentfeedback.Dao.StudentDao;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.FailReason;
@@ -12,6 +13,7 @@ import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.ProcedureRespon
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
+import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @Named
@@ -51,7 +53,9 @@ public class StudentLogicBean {
             if (!s.getPassword().equals(loginInput.getPassword())) {
                 return LoginProcedureResponse.buildFailedResponse(FailReason.PASSWORD_NOT_MATCH);
             }
-
+            if (s.getValidationStatus() == UserValidationStatus.PENDING) {
+                return LoginProcedureResponse.buildFailedResponse(FailReason.USER_NOT_YET_VALIDATED);
+            }
             String authToken = this.tokenGenerator.generateAuthorizationToken(s);
             s.setAuthorizationToken(authToken);
             studentDao.save(s);
@@ -59,6 +63,15 @@ public class StudentLogicBean {
 
 
         }
+    }
+
+    public Student getStudentByAuthToken(String token) throws AuthenticationException {
+        Optional<Student> s = studentDao.findByAuthorizationToken(token);
+        if (s.isEmpty()) {
+            throw new AuthenticationException("Token not found");
+        }
+        return s.get();
+
     }
 
 }

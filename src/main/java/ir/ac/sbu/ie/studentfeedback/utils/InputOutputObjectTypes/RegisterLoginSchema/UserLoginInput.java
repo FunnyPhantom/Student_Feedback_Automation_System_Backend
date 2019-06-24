@@ -11,7 +11,8 @@ public class UserLoginInput {
     private String password;
 
     public static boolean isBlankEntry(UserLoginInput input) {
-        return Strings.isBlank(input.getUsername())
+        return input == null
+                || Strings.isBlank(input.getUsername())
                 || Strings.isBlank(input.getPassword());
     }
 }

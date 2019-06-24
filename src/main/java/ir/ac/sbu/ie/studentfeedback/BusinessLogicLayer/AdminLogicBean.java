@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import javax.inject.Named;
+import javax.naming.AuthenticationException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -156,5 +157,14 @@ public class AdminLogicBean {
                         .collect(Collectors.toList())
         );
     }
+
+    public Admin getAdminByAuthorizationToken(String authToken) throws AuthenticationException {
+        Optional<Admin> adminOptional = adminDao.findByAuthorizationToken(authToken);
+        if (adminOptional.isEmpty()) {
+            throw new AuthenticationException("Token not found.");
+        }
+        return adminOptional.get();
+    }
+
 
 }

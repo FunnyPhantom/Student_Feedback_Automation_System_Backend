@@ -22,6 +22,7 @@ public enum FailReason {
 
     AUTH_TOKEN_INVALID,
     USER_ID_NOT_FOUND,
+    USER_NOT_YET_VALIDATED,
 
 
     SERVER_ERROR,

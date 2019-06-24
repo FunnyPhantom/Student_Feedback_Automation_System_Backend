@@ -1,6 +1,6 @@
 package ir.ac.sbu.ie.studentfeedback.Entities;
 
-import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRoles;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRole;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.AdminRegisterInput;
 import lombok.ToString;
@@ -26,7 +26,7 @@ public class Admin extends User {
     }
 
     @Override
-    public UserRoles getUserRole() {
-        return UserRoles.ADMIN;
+    public UserRole getUserRole() {
+        return UserRole.ADMIN;
     }
 }

@@ -1,6 +1,6 @@
 package ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.IdSchema;
 
-import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRoles;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class EmployeeIdSchema extends UserIdSchema {
     @Override
-    public UserRoles getUserRole() {
+    public UserRole getUserRole() {
         return null;
     }
 }

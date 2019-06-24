@@ -1,7 +1,7 @@
 package ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema;
 
 import ir.ac.sbu.ie.studentfeedback.Entities.User;
-import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRoles;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRole;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import lombok.Data;
 
@@ -24,6 +24,6 @@ public abstract class UserInputOutputSchema {
         this.validationStatus = u.getValidationStatus();
     }
 
-    public abstract UserRoles getUserRole();
+    public abstract UserRole getUserRole();
 
 }

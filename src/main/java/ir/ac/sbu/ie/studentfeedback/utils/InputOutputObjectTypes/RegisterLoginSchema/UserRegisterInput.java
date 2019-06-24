@@ -15,7 +15,8 @@ public abstract class UserRegisterInput {
     protected String password;
 
     public static boolean isBlankEntry(UserRegisterInput userRegisterInput) {
-        return Strings.isBlank(userRegisterInput.getFirstName()) ||
+        return userRegisterInput == null ||
+                Strings.isBlank(userRegisterInput.getFirstName()) ||
                 Strings.isBlank(userRegisterInput.getLastName()) ||
                 Strings.isBlank(userRegisterInput.getUsername()) ||
                 Strings.isBlank(userRegisterInput.getPassword());

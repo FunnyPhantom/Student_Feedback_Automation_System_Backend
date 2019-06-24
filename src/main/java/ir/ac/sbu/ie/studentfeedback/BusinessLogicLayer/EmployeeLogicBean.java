@@ -3,6 +3,7 @@ package ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer;
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.util.AuthorizationTokenGenerator;
 import ir.ac.sbu.ie.studentfeedback.Dao.EmployeeDao;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.FailReason;
@@ -12,6 +13,7 @@ import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.ProcedureRespon
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
+import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @Named
@@ -33,8 +35,6 @@ public class EmployeeLogicBean {
             try {
                 // todo: store hashed version of password. (also check password hashed way)
                 Employee savedEmployee = employeeDao.save(Employee.buildFromEmployeeInput(employeeInput));
-                System.out.println("successfully employee saved");
-                System.out.println(savedEmployee);
                 return BooleanProcedureResponse.SUCCESS;
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -61,12 +61,24 @@ public class EmployeeLogicBean {
                 if (!e.getPassword().equals(loginInput.getPassword())) {
                     return LoginProcedureResponse.buildFailedResponse(FailReason.PASSWORD_NOT_MATCH);
                 } else {
+                    if (e.getValidationStatus() == UserValidationStatus.PENDING) {
+                        return LoginProcedureResponse.buildFailedResponse(FailReason.USER_NOT_YET_VALIDATED);
+                    }
                     String token = tokenGenerator.generateAuthorizationToken(e);
                     e.setAuthorizationToken(token);
                     employeeDao.save(e);
                     return LoginProcedureResponse.buildSuccessResponse(token);
                 }
             }
+        }
+    }
+
+    public Employee getEmployeeWithAuthToken(String token) throws AuthenticationException {
+        Optional<Employee> employeeOptional = employeeDao.findByAuthorizationToken(token);
+        if (employeeOptional.isPresent()) {
+            return employeeOptional.get();
+        } else {
+            throw new AuthenticationException("Token not found.");
         }
     }
 

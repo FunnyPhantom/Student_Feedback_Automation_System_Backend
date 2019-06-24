@@ -1,7 +1,7 @@
 package ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema;
 
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
-import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRoles;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,8 +12,8 @@ public class EmployeeInputOutputSchema extends UserInputOutputSchema {
     private String jobTitle;
 
     @Override
-    public UserRoles getUserRole() {
-        return UserRoles.EMPLOYEE;
+    public UserRole getUserRole() {
+        return UserRole.EMPLOYEE;
     }
 
     public EmployeeInputOutputSchema() {
