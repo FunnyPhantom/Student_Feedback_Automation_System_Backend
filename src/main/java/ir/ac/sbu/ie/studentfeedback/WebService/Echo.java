@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.WebServices;
+package ir.ac.sbu.ie.studentfeedback.WebService;
 
 import javax.inject.Named;
 import javax.ws.rs.GET;

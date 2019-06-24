@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.WebServices;
+package ir.ac.sbu.ie.studentfeedback.WebService;
 
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.EmployeeLogicBean;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;

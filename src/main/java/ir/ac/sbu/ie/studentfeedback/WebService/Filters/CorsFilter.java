@@ -1,4 +1,4 @@
-package ir.ac.sbu.ie.studentfeedback.WebServices.Filters;
+package ir.ac.sbu.ie.studentfeedback.WebService.Filters;
 
 import javax.ws.rs.container.*;
 import javax.ws.rs.core.Response;
