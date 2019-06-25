@@ -1,0 +1,1 @@
+cd Front\Student_Feedback_Automation_System & npm i & npm run build & npm start
