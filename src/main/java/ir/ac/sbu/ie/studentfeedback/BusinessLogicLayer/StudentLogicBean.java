@@ -1,9 +1,15 @@
 package ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer;
 
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.util.AuthorizationTokenGenerator;
+import ir.ac.sbu.ie.studentfeedback.Dao.CaseDao;
+import ir.ac.sbu.ie.studentfeedback.Dao.EmployeeDao;
 import ir.ac.sbu.ie.studentfeedback.Dao.StudentDao;
+import ir.ac.sbu.ie.studentfeedback.Entities.Case;
+import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.CaseStatus;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.CaseInputOutputSchema.CaseInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.FailReason;
@@ -14,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
 import javax.naming.AuthenticationException;
+import javax.ws.rs.NotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @Named
@@ -22,12 +30,20 @@ public class StudentLogicBean {
     private final StudentDao studentDao;
     private final InputValidationLogic validationLogic;
     private final AuthorizationTokenGenerator tokenGenerator;
+    private final EmployeeDao employeeDao;
+    private final CaseDao caseDao;
 
     @Autowired
-    public StudentLogicBean(StudentDao studentDao, InputValidationLogic inputValidationLogic, AuthorizationTokenGenerator authorizationTokenGenerator) {
+    public StudentLogicBean(StudentDao studentDao,
+                            InputValidationLogic inputValidationLogic,
+                            AuthorizationTokenGenerator authorizationTokenGenerator,
+                            EmployeeDao employeeDao,
+                            CaseDao caseDao) {
         this.studentDao = studentDao;
         this.validationLogic = inputValidationLogic;
         this.tokenGenerator = authorizationTokenGenerator;
+        this.employeeDao = employeeDao;
+        this.caseDao = caseDao;
     }
 
     public BooleanProcedureResponse registerStudent(StudentRegisterInput registerInput) {
@@ -72,6 +88,22 @@ public class StudentLogicBean {
         }
         return s.get();
 
+    }
+
+    public Case createNewCase(String authToken, CaseInput caseInput) throws AuthenticationException, NotFoundException {
+        Student s = this.getStudentByAuthToken(authToken);
+        Employee e = employeeDao.findById(caseInput.getSelectedEmployeeId()).orElse(null);
+        if (s == null) {
+            throw new NotFoundException();
+        }
+        Case aCase = new Case(caseInput.getTitle(), caseInput.getDescription(), caseInput.getCaseType(), CaseStatus.OPEN, s, e);
+        return this.caseDao.save(aCase);
+
+    }
+
+    public List<Case> getStudentCasesByAuthToken(String token) throws AuthenticationException {
+        Student s = this.getStudentByAuthToken(token);
+        return s.getIssuedCases();
     }
 
 }

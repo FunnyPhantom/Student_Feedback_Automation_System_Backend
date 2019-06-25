@@ -6,6 +6,7 @@ import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.EmployeeBriefSchema;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.FailReason;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.ProcedureResponse.BooleanProcedureResponse;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.ProcedureResponse.InputValidationResponse;
@@ -14,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
 import javax.naming.AuthenticationException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Named
 public class EmployeeLogicBean {
@@ -82,6 +86,14 @@ public class EmployeeLogicBean {
         }
     }
 
+
+    public List<EmployeeBriefSchema> getListOfEmployeesAndTheirJobTitles() {
+        return StreamSupport
+                .stream(employeeDao.findAll().spliterator(), false)
+                .map(EmployeeBriefSchema::new)
+                .collect(Collectors.toList())
+                ;
+    }
 
 }
 

@@ -1,7 +1,12 @@
 package ir.ac.sbu.ie.studentfeedback.WebService;
 
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.StudentLogicBean;
+import ir.ac.sbu.ie.studentfeedback.Dao.EmployeeDao;
+import ir.ac.sbu.ie.studentfeedback.Entities.Case;
+import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.CaseStatus;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.CaseInputOutputSchema.CaseInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.StudentInputOutputSchema;
@@ -15,6 +20,9 @@ import javax.naming.AuthenticationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
+import java.util.Optional;
 
 import static ir.ac.sbu.ie.studentfeedback.WebService.Filters.Headers.AUTHORIZATION_HEADER;
 
@@ -72,5 +80,37 @@ public class StudentWebService {
             return Response.serverError().build();
         }
     }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/new_case")
+    public Response createNewCase(@HeaderParam(AUTHORIZATION_HEADER) String authToken, CaseInput caseInput) {
+        if (CaseInput.isBlankEntry(caseInput)) {
+            return Response.status(400).entity("blank entry").build();
+        }
+        try {
+            Case c = studentLogicBean.createNewCase(authToken, caseInput);
+            return Response.ok().entity(c).build();
+        } catch (AuthenticationException e) {
+            return Response.status(401).build();
+        } catch (NotFoundException e) {
+            return Response.status(400).entity("wrong employee id").build();
+        }
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/my_cases")
+    public Response getMyCases(@HeaderParam(AUTHORIZATION_HEADER) String authToken) {
+        try {
+            List<Case> caseList = studentLogicBean.getStudentCasesByAuthToken(authToken);
+            return Response.ok().entity(caseList).build();
+        } catch (AuthenticationException e) {
+            return Response.status(401).build();
+        }
+    }
+
 
 }

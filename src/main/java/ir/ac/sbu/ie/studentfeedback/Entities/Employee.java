@@ -7,7 +7,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @ToString
 @Entity
@@ -16,6 +18,11 @@ public class Employee extends User {
     @Setter
     @Getter
     protected String jobTitle;
+
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "responsibleEmployee")
+    private List<Case> responsibleCases;
 
     public Employee(@NotNull String firstName, @NotNull String lastName, @NotNull String username, @NotNull String password, @NotNull String jobTitle) {
         super(firstName, lastName, username, password);
