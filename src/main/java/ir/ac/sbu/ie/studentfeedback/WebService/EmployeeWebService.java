@@ -3,6 +3,7 @@ package ir.ac.sbu.ie.studentfeedback.WebService;
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.EmployeeLogicBean;
 import ir.ac.sbu.ie.studentfeedback.Entities.Case;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.ActionSchema.ActionInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.EmployeeBriefSchema;
@@ -87,6 +88,37 @@ public class EmployeeWebService {
         try {
             List<Case> list = employeeLogicBean.getEmployeeCasesWithAuthToken(authHeader);
             return Response.ok().entity(list).build();
+        } catch (AuthenticationException e) {
+            return Response.status(401).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/my_assigned_cases/{caseId}")
+    public Response getResponsibleCaseWithId(@HeaderParam(AUTHORIZATION_HEADER) String authHeader,
+                                             @PathParam("caseId") Long caseId) {
+        try {
+            Case c = employeeLogicBean.getEmployeeCaseWithAuthTokenAndId(authHeader, caseId);
+            return Response.ok().entity(c).build();
+        } catch (AuthenticationException e) {
+            return Response.status(401).entity(e.getMessage()).build();
+        } catch (NotFoundException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/my_assigned_cases/{caseId}/answer")
+    public Response answerToCase(@HeaderParam(AUTHORIZATION_HEADER) String authHeader,
+                                 @PathParam("caseId") Long caseId,
+                                 ActionInput actionInput) {
+        try {
+            this.employeeLogicBean.answerOnCase(authHeader, caseId, actionInput);
+            return Response.ok().build();
         } catch (AuthenticationException e) {
             return Response.status(401).entity(e.getMessage()).build();
         }

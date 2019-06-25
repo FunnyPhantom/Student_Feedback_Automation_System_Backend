@@ -2,6 +2,7 @@ package ir.ac.sbu.ie.studentfeedback.Entities;
 
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRole;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import java.util.List;
 @ToString
 @Entity
 public class Employee extends User {
+    public final static Employee EMPTY_EMPLOYEE = new Employee("empty", "employee", "empty_reserved", "1234", "empty employee");
     @NotNull
     @Setter
     @Getter

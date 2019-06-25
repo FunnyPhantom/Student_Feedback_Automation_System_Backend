@@ -2,10 +2,12 @@ package ir.ac.sbu.ie.studentfeedback.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.ActionType;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.ActionSchema.ActionInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.EmployeeInputOutputSchema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -36,6 +38,7 @@ public class ActionOnCase {
 
     @OneToOne
     @Setter
+    @Nullable
     private Employee referredEmployee;
 
     @ManyToOne
@@ -48,5 +51,16 @@ public class ActionOnCase {
 
     public EmployeeInputOutputSchema getReferredEmployee() {
         return new EmployeeInputOutputSchema(this.referredEmployee);
+    }
+
+    public ActionOnCase() {
+    }
+
+    public ActionOnCase(ActionInput actionInput, Employee responsibleEmployee, Employee referredEmployee, Case targetCase) {
+        this.actionType = actionInput.getActionType();
+        this.description = actionInput.getDescription();
+        this.employee = responsibleEmployee;
+        this.referredEmployee = referredEmployee;
+        this.targetCase = targetCase;
     }
 }
