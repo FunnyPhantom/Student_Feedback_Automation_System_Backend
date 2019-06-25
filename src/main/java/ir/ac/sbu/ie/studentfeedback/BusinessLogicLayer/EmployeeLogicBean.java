@@ -2,6 +2,7 @@ package ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer;
 
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.util.AuthorizationTokenGenerator;
 import ir.ac.sbu.ie.studentfeedback.Dao.EmployeeDao;
+import ir.ac.sbu.ie.studentfeedback.Entities.Case;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
@@ -86,6 +87,11 @@ public class EmployeeLogicBean {
         }
     }
 
+    public List<Case> getEmployeeCasesWithAuthToken(String token) throws AuthenticationException {
+        Employee e = this.getEmployeeWithAuthToken(token);
+        return e.getResponsibleCases();
+    }
+
 
     public List<EmployeeBriefSchema> getListOfEmployeesAndTheirJobTitles() {
         return StreamSupport
@@ -94,6 +100,7 @@ public class EmployeeLogicBean {
                 .collect(Collectors.toList())
                 ;
     }
+
 
 }
 

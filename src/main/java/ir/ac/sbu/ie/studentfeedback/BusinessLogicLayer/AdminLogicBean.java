@@ -8,6 +8,7 @@ import ir.ac.sbu.ie.studentfeedback.Entities.Admin;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
 import ir.ac.sbu.ie.studentfeedback.Entities.User;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.UserRole;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.IdSchema.UserIdSchema;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.AdminRegisterInput;
@@ -92,14 +93,12 @@ public class AdminLogicBean {
         }
         User user = userConainer.get();
         user.setValidationStatus(UserValidationStatus.VALIDATED);
-        switch (user.getUserRole()) {
-            case ADMIN:
-                break;
-            case EMPLOYEE:
-                employeeDao.save(((Employee) user));
-            case STUDENT:
-                studentDao.save(((Student) user));
-
+        ir.ac.sbu.ie.studentfeedback.Entities.util.UserRole userRole = user.getUserRole();
+        if (userRole == UserRole.ADMIN) {
+        } else if (userRole == UserRole.EMPLOYEE) {
+            employeeDao.save(((Employee) user));
+        } else if (userRole == UserRole.STUDENT) {
+            studentDao.save(((Student) user));
         }
         return BooleanProcedureResponse.SUCCESS;
     }

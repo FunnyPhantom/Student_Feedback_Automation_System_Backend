@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.CaseStatus;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.CaseType;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.Satisfaction;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.EmployeeInputOutputSchema;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.StudentInputOutputSchema;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
-@Entity
+@Entity(name = "sf_case")
 public class Case {
 
     @Id
@@ -40,16 +43,26 @@ public class Case {
 
 
     @Setter
-    @Getter
-    @JsonIgnore
     @ManyToOne
     private Student issuingStudent;
 
+    public StudentInputOutputSchema getIssuingStudent() {
+        return new StudentInputOutputSchema(this.issuingStudent);
+    }
+
     @Setter
-    @Getter
-    @JsonIgnore
     @ManyToOne
     private Employee responsibleEmployee;
+
+    public EmployeeInputOutputSchema getResponsibleEmployee() {
+        return new EmployeeInputOutputSchema(this.responsibleEmployee);
+    }
+
+
+    @OneToMany(mappedBy = "targetCase")
+    @Setter
+    @Getter
+    private List<ActionOnCase> actions;
 
     @Setter
     @Getter
@@ -71,5 +84,18 @@ public class Case {
         this.responsibleEmployee = responsibleEmployee;
     }
 
+    public Case(Case anotherCase) {
+        this(anotherCase.title, anotherCase.description, anotherCase.caseType, anotherCase.caseStatus, anotherCase.issuingStudent, anotherCase.responsibleEmployee);
+        this.issueDate = anotherCase.issueDate;
+        this.id = anotherCase.id;
+        this.studentSatisfaction = anotherCase.studentSatisfaction;
+        this.actions = anotherCase.actions;
+    }
+
+    public Case copyWithoutActions() {
+        Case c = new Case(this);
+        c.actions = null;
+        return c;
+    }
 
 }

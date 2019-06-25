@@ -1,9 +1,11 @@
 package ir.ac.sbu.ie.studentfeedback.WebService;
 
 import ir.ac.sbu.ie.studentfeedback.BusinessLogicLayer.EmployeeLogicBean;
+import ir.ac.sbu.ie.studentfeedback.Entities.Case;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.EmployeeRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
+import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.EmployeeBriefSchema;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.UserSchema.EmployeeInputOutputSchema;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.FailReason;
 import ir.ac.sbu.ie.studentfeedback.utils.ProcedureCommunication.ProcedureResponse.BooleanProcedureResponse;
@@ -15,6 +17,8 @@ import javax.naming.AuthenticationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
 
 import static ir.ac.sbu.ie.studentfeedback.WebService.Filters.Headers.AUTHORIZATION_HEADER;
 
@@ -74,4 +78,33 @@ public class EmployeeWebService {
             return Response.serverError().build();
         }
     }
+
+    @GET
+    @Consumes(MediaType.WILDCARD)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/my_assigned_cases")
+    public Response getResponsibleCases(@HeaderParam(AUTHORIZATION_HEADER) String authHeader) {
+        try {
+            List<Case> list = employeeLogicBean.getEmployeeCasesWithAuthToken(authHeader);
+            return Response.ok().entity(list).build();
+        } catch (AuthenticationException e) {
+            return Response.status(401).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Consumes(MediaType.WILDCARD)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/get_brief_employee_list")
+    public Response getBriefListOfEmployees() {
+        try {
+            List<EmployeeBriefSchema> list = employeeLogicBean.getListOfEmployeesAndTheirJobTitles();
+            return Response.ok().entity(list).build();
+        } catch (Exception e) {
+            System.err.println("unexpected exception occured.");
+            e.printStackTrace();
+            return Response.serverError().build();
+        }
+    }
+
 }

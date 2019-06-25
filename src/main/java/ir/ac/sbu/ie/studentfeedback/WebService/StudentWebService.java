@@ -6,6 +6,7 @@ import ir.ac.sbu.ie.studentfeedback.Entities.Case;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.CaseStatus;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.Satisfaction;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.CaseInputOutputSchema.CaseInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.UserLoginInput;
@@ -83,7 +84,7 @@ public class StudentWebService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
     @Path("/new_case")
     public Response createNewCase(@HeaderParam(AUTHORIZATION_HEADER) String authToken, CaseInput caseInput) {
         if (CaseInput.isBlankEntry(caseInput)) {
@@ -95,7 +96,7 @@ public class StudentWebService {
         } catch (AuthenticationException e) {
             return Response.status(401).build();
         } catch (NotFoundException e) {
-            return Response.status(400).entity("wrong employee id").build();
+            return Response.status(400).entity("employee id not found").build();
         }
     }
 
@@ -112,5 +113,42 @@ public class StudentWebService {
         }
     }
 
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
+    @Path("/my_cases/{caseId}")
+    public Response getMyCaseWithId(@HeaderParam(AUTHORIZATION_HEADER) String authToken,
+                                    @PathParam("caseId") Long caseId) {
+        try {
+            Case c = studentLogicBean.getStudentCaseByAuthTokenAndId(authToken, caseId);
+            return Response.status(200).entity(c).build();
+        } catch (NotFoundException e) {
+            return Response.status(404).build();
+        } catch (AuthenticationException e) {
+            return Response.status(401).build();
+        }
+    }
+
+    @PUT
+    @Consumes(MediaType.WILDCARD)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
+    @Path("/my_cases/{caseId}")
+    public Response submitSatisfaction(@HeaderParam(AUTHORIZATION_HEADER) String authToken,
+                                       @PathParam("caseId") Long caseId,
+                                       @QueryParam("satisfaction") String satisfactionInput) {
+        try {
+            Satisfaction satisfaction = Satisfaction.valueOf(satisfactionInput.toUpperCase());
+            studentLogicBean.submitSatisfactionForCase(authToken, caseId, satisfaction);
+            return Response.ok().build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(400).entity("satisfaction must be either: dissatisfied, satisfied").build();
+        } catch (AuthenticationException e) {
+            return Response.status(401).build();
+        } catch (NotFoundException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        } catch (ForbiddenException e) {
+            return Response.status(403).entity(e.getMessage()).build();
+        }
+    }
 
 }

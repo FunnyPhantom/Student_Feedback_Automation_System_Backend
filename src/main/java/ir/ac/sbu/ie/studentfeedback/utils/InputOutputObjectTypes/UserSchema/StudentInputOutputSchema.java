@@ -21,7 +21,7 @@ public class StudentInputOutputSchema extends UserInputOutputSchema {
 
     public StudentInputOutputSchema(Student s) {
         super(s);
-        this.studentId = getStudentId();
+        this.studentId = s.getStudentId();
     }
 
 }

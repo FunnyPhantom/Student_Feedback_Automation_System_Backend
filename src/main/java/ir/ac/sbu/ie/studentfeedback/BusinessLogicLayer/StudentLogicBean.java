@@ -8,6 +8,7 @@ import ir.ac.sbu.ie.studentfeedback.Entities.Case;
 import ir.ac.sbu.ie.studentfeedback.Entities.Employee;
 import ir.ac.sbu.ie.studentfeedback.Entities.Student;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.CaseStatus;
+import ir.ac.sbu.ie.studentfeedback.Entities.util.Satisfaction;
 import ir.ac.sbu.ie.studentfeedback.Entities.util.UserValidationStatus;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.CaseInputOutputSchema.CaseInput;
 import ir.ac.sbu.ie.studentfeedback.utils.InputOutputObjectTypes.RegisterLoginSchema.StudentRegisterInput;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
 import javax.naming.AuthenticationException;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +53,8 @@ public class StudentLogicBean {
         if (validationResponse.hasFailed()) {
             return BooleanProcedureResponse.buildFailedResponse(validationResponse.getFailReason());
         } else {
-            this.studentDao.save(Student.buildFromStudentInput(registerInput));
+            Student s = Student.buildFromStudentInput(registerInput);
+            this.studentDao.save(s);
             return BooleanProcedureResponse.SUCCESS;
         }
     }
@@ -93,7 +96,7 @@ public class StudentLogicBean {
     public Case createNewCase(String authToken, CaseInput caseInput) throws AuthenticationException, NotFoundException {
         Student s = this.getStudentByAuthToken(authToken);
         Employee e = employeeDao.findById(caseInput.getSelectedEmployeeId()).orElse(null);
-        if (s == null) {
+        if (e == null) {
             throw new NotFoundException();
         }
         Case aCase = new Case(caseInput.getTitle(), caseInput.getDescription(), caseInput.getCaseType(), CaseStatus.OPEN, s, e);
@@ -104,6 +107,24 @@ public class StudentLogicBean {
     public List<Case> getStudentCasesByAuthToken(String token) throws AuthenticationException {
         Student s = this.getStudentByAuthToken(token);
         return s.getIssuedCases();
+    }
+
+    public Case getStudentCaseByAuthTokenAndId(String authToken, Long id) throws AuthenticationException, NotFoundException {
+        Student s = this.getStudentByAuthToken(authToken);
+        Case c = caseDao.findById(id).orElse(null);
+        if (c == null) {
+            throw new NotFoundException("case NotFound.");
+        }
+        return c;
+    }
+
+    public void submitSatisfactionForCase(String authToken, Long caseId, Satisfaction s) throws AuthenticationException, NotFoundException, ForbiddenException {
+        Case c = getStudentCaseByAuthTokenAndId(authToken, caseId);
+        if (c.getCaseStatus() == CaseStatus.OPEN) {
+            throw new ForbiddenException("cannot rate ongoing case, must wait till case status not to be open");
+        }
+        c.setStudentSatisfaction(s);
+        caseDao.save(c);
     }
 
 }
